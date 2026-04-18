@@ -9,41 +9,41 @@
     tools:context=".DashboardFragment">
 
 <!--    Top bar -->
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:baselineAligned="false"
+        android:layout_height="76dp"
+        android:paddingHorizontal="20dp"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingStart="14dp"
-        android:paddingEnd="14dp"
-        android:background="#1F5E46">
+        android:background="#2D6A4F">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/ivProfileTop"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@drawable/ic_profile_avatar"
+            android:scaleType="centerCrop"
+            android:background="@drawable/bg_rounded_light_green"
+            android:padding="2dp" />
+
+        <TextView
+            android:id="@+id/tvGreetingTop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_marginStart="10dp"
+            android:text="Assalam o Alaikum\nWali 👋"
+            android:textColor="#E8F5EE"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="2dp" />
 
-            <View
+            <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/ic_shield" />
-
-            <TextView
-                android:id="@+id/tvAppName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="SmartKarobar"
-                android:textColor="#E8F5EE"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:src="@drawable/ic_shield" />
     </LinearLayout>
-
 <!--    Body -->
     <ScrollView
         android:layout_width="match_parent"
@@ -370,7 +370,7 @@
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="80dp"/>
+                android:layout_height="70dp"/>
         </LinearLayout>
     </ScrollView>
 
