@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "486785253938",
+    "project_id": "smartkarobar-895df",
+    "storage_bucket": "smartkarobar-895df.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:486785253938:android:d3a9c255f5b3c21feab22b",
+        "android_client_info": {
+          "package_name": "com.example.smartkarobar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBpTdhyPcWuM1kD4z1bZBq-OJctHp6mbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

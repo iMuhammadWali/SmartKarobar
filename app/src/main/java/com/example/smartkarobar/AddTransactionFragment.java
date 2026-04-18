@@ -17,6 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+//TODO: Save a transaction to firebase on save button
+// I will also need to implement auth before saving the transaction.
 public class AddTransactionFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -97,9 +100,9 @@ public class AddTransactionFragment extends Fragment {
         btnSaveTransaction.setOnClickListener(v -> onSaveClicked());
 
         // Back button
-        ivBack.setOnClickListener(v ->
-                requireActivity().getSupportFragmentManager().popBackStack()
-        );
+        ivBack.setOnClickListener((v)->{
+           requireActivity().getSupportFragmentManager().popBackStack();
+        });
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

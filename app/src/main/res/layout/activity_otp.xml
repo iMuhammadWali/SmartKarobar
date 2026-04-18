@@ -10,7 +10,7 @@
     android:paddingTop="24dp"
     android:paddingRight="20dp"
     android:paddingBottom="20dp"
-    tools:context=".PinActivity">
+    tools:context=".OtpActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -94,6 +94,21 @@
                 android:layout_height="18dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/bg_pin_dot_empty" />
+
+            <View
+                android:id="@+id/dot5"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_pin_dot_empty" />
+
+            <View
+                android:id="@+id/dot6"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_pin_dot_empty" />
+
         </LinearLayout>
 
         <!-- Keypad -->
