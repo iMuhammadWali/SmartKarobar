@@ -27,9 +27,9 @@ public class AddTransactionFragment extends Fragment {
     private LinearLayout btnSale, btnReceivable, btnSupplier, btnExpense, layoutUdhaarFields, btnSaveTransaction;
     private EditText etAmount, etDescription, etCustomerName, etCustomerPhone;
 
-    private ImageView ivSale, ivReceivable, ivSupplier, ivExpense;
+    private ImageView ivSale, ivReceivable, ivSupplier, ivExpense, ivBack;
     private TextView tvSale, tvReceivable, tvSupplier, tvExpense;
-    private String selectedCategory = "SALE";
+    private String selectedCategory = "RECEIVABLE";
 
     public AddTransactionFragment() {
         // Required empty public constructor
@@ -74,39 +74,55 @@ public class AddTransactionFragment extends Fragment {
         etCustomerName = v.findViewById(R.id.etCustomerName);
         etCustomerPhone = v.findViewById(R.id.etCustomerPhone);
 
-        ivSale = (ImageView) btnSale.getChildAt(0);
-        tvSale = (TextView) btnSale.getChildAt(1);
+        ivSale = v.findViewById(R.id.ivSale);
+        tvSale = v.findViewById(R.id.tvSale);
 
-        ivReceivable = (ImageView) btnReceivable.getChildAt(0);
-        tvReceivable = (TextView) btnReceivable.getChildAt(1);
+        ivReceivable = v.findViewById(R.id.ivReceivable);
+        tvReceivable = v.findViewById(R.id.tvReceivable);
 
-        ivSupplier = (ImageView) btnSupplier.getChildAt(0);
-        tvSupplier = (TextView) btnSupplier.getChildAt(1);
+        ivSupplier = v.findViewById(R.id.ivSupplier);
+        tvSupplier = v.findViewById(R.id.tvSupplier);
 
-        ivExpense = (ImageView) btnExpense.getChildAt(0);
-        tvExpense = (TextView) btnExpense.getChildAt(1);
+        ivExpense = v.findViewById(R.id.ivExpense);
+        tvExpense = v.findViewById(R.id.tvExpense);
+
+        ivBack = v.findViewById(R.id.ivBack);
+    }
+    private void applyListeners() {
+        btnSale.setOnClickListener(v -> setCategory("SALE"));
+        btnReceivable.setOnClickListener(v -> setCategory("RECEIVABLE"));
+        btnSupplier.setOnClickListener(v -> setCategory("SUPPLIER"));
+        btnExpense.setOnClickListener(v -> setCategory("EXPENSE"));
+
+        btnSaveTransaction.setOnClickListener(v -> onSaveClicked());
+
+        // Back button
+        ivBack.setOnClickListener(v ->
+                requireActivity().getSupportFragmentManager().popBackStack()
+        );
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
-        setCategory("RECEIVABLE"); // default selected
+        setCategory("RECEIVABLE");
+        applyListeners();
     }
 
     private void setCategory(String category) {
         selectedCategory = category;
-
         layoutUdhaarFields.setVisibility("RECEIVABLE".equals(category) ? View.VISIBLE : View.GONE);
 
         int selectedBg = R.drawable.bg_rounded_dark_green;
         int unselectedBg = R.drawable.bg_quick_item;
 
+        // harcoded stuff
         int selectedText = ContextCompat.getColor(requireContext(), android.R.color.white);
         int unselectedText = 0xFF2F3740;
         int selectedIcon = ContextCompat.getColor(requireContext(), android.R.color.white);
         int unselectedIcon = 0xFF2D6A4F;
 
-        // reset all
+        // reset all because we dont know which one was selected.
         applyCategoryStyle(btnSale, ivSale, tvSale, false, selectedBg, unselectedBg, selectedText, unselectedText, selectedIcon, unselectedIcon);
         applyCategoryStyle(btnReceivable, ivReceivable, tvReceivable, false, selectedBg, unselectedBg, selectedText, unselectedText, selectedIcon, unselectedIcon);
         applyCategoryStyle(btnSupplier, ivSupplier, tvSupplier, false, selectedBg, unselectedBg, selectedText, unselectedText, selectedIcon, unselectedIcon);
@@ -143,7 +159,7 @@ public class AddTransactionFragment extends Fragment {
     ) {
         container.setBackgroundResource(selected ? selectedBg : unselectedBg);
         text.setTextColor(selected ? selectedText : unselectedText);
-        icon.setImageTintList(  ColorStateList.valueOf(selected ? selectedIcon : unselectedIcon));
+        icon.setImageTintList(ColorStateList.valueOf(selected ? selectedIcon : unselectedIcon));
     }
 
     private void onSaveClicked() {
