@@ -1,19 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:background="#F8FBFA">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Custom Bottom Nav -->
+    <LinearLayout
+        android:id="@+id/customBottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:gravity="center">
+
+        <!-- Ghar -->
+        <LinearLayout
+            android:id="@+id/tabHome"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/bg_nav_selected"
+            android:padding="6dp">
+
+            <ImageView
+                android:id="@+id/iconHome"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_home"
+                app:tint="#D8F3DC" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Ghar"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#D8F3DC" />
+        </LinearLayout>
+
+        <!-- Hisaab -->
+        <LinearLayout
+            android:id="@+id/tabHisaab"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="6dp">
+
+            <ImageView
+                android:id="@+id/iconHisaab"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_hisaab"
+                app:tint="#2D6A4F" />
+
+            <TextView
+                android:id="@+id/textHisaab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Hisaab"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#2D6A4F" />
+        </LinearLayout>
+
+        <!-- Reports -->
+        <LinearLayout
+            android:id="@+id/tabReports"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="6dp">
+
+            <ImageView
+                android:id="@+id/iconReports"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_reports"
+                app:tint="#2D6A4F" />
+
+            <TextView
+                android:id="@+id/textReports"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Reports"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#2D6A4F" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

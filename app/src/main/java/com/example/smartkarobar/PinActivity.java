@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -73,7 +74,6 @@ public class PinActivity extends AppCompatActivity {
         });
     }
     private void onDigitPressed(String digit) {
-
         enteredPin.append(digit);
         updatePinDots();
 
@@ -89,6 +89,7 @@ public class PinActivity extends AppCompatActivity {
         } else {
             enteredPin.setLength(0);
             updatePinDots();
+            Toast.makeText(this, "You entered wrong pin", Toast.LENGTH_SHORT).show();
         }
     }
     private void updatePinDots() {
