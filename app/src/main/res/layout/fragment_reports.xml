@@ -1,14 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/reportsRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReportsFragment">
+    android:orientation="vertical"
+    android:background="#E9F5EF">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- Top Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:background="#2D6A4F"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
+        <ImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_rounded_light_green"
+            android:padding="2dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile_avatar" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:text="SmartKarobar"
+            android:textColor="#E8F5EE"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello this is reports fragment" />
+        android:fillViewport="true"
+        android:scrollbars="none">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tvReportsHeading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reports"
+                android:textColor="#145A3B"
+                android:textSize="34sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvReportsSubHeading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Apne karobar ki taraqqi dekhein"
+                android:textColor="#4B6A5B"
+                android:textSize="13sp" />
+
+            <!-- AI Summary -->
+            <LinearLayout
+                android:id="@+id/cardAiSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_rounded_light_green"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/bg_nav_selected"
+                    android:gravity="center"
+                    android:text="✦"
+                    android:textColor="#D8F3DC"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvAiSummary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:text="AI summary yahan show hogi..."
+                    android:textColor="#1F5138"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Weekly Sales Trend -->
+            <LinearLayout
+                android:id="@+id/cardWeeklyTrend"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:layout_marginTop="12dp"
+                android:background="#FFFFFF"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Is Hafte Ki Bikri"
+                            android:textColor="#1E5B3E"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Weekly Sales Trend"
+                            android:textColor="#8A8F94"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvWeeklySalesAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rs. 0"
+                        android:textColor="#1E5B3E"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChartWeeklySales"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="12dp"
+                    android:minHeight="200dp"
+                    android:background="#F7FAF8" />
+
+            </LinearLayout>
+
+            <!-- Profit Projection -->
+            <LinearLayout
+                android:id="@+id/cardProfitProjection"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_nav_selected"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PROFIT PROJECTION"
+                        android:textColor="#94D3B5"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvProfitProjectionAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rs. 0"
+                        android:textColor="#9FE3C3"
+                        android:textSize="32sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvProfitProjectionSub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Expected net gain this month"
+                        android:textColor="#84C9AA"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/bg_reports_icon_circle"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_trending_up"
+                    android:tint="#D8F3DC" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="90dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
