@@ -39,7 +39,6 @@ public class HisaabFragment extends Fragment {
     private TextView tvTransactionCount, tvAll, tvSales, tvReceivables, tvExpenses, tvPayables;
     // Range chips + title
     private TextView tvRangeToday, tvRangeWeek, tvRangeMonth, tvSectionTitle;
-    // top bar
     private ImageView ivProfile;
     private TextView tvUsername;
 
@@ -74,7 +73,7 @@ public class HisaabFragment extends Fragment {
         tvSectionTitle = v.findViewById(R.id.tvSectionTitle);
 
         ivProfile = v.findViewById(R.id.ivProfile);
-        tvUsername = v.findViewById(R.id.tvUsername); // make sure this exists in fragment_hisaab.xml
+        tvUsername = v.findViewById(R.id.tvUsername);
     }
 
     @Override
@@ -96,6 +95,11 @@ public class HisaabFragment extends Fragment {
             @Override
             public void onClearPayable(@NonNull HisaabItem item) {
                 confirmAndClear(item, "PAYABLE");
+            }
+
+            @Override
+            public void onDelete(@NonNull HisaabItem item) {
+                confirmAndDelete(item);
             }
         });
 
@@ -267,6 +271,7 @@ public class HisaabFragment extends Fragment {
             startCal.set(Calendar.MINUTE, 0);
             startCal.set(Calendar.SECOND, 0);
             startCal.set(Calendar.MILLISECOND, 0);
+
             endCal = (Calendar) startCal.clone();
             endCal.add(Calendar.DAY_OF_MONTH, 1);
 
@@ -277,6 +282,7 @@ public class HisaabFragment extends Fragment {
             startCal.set(Calendar.MINUTE, 0);
             startCal.set(Calendar.SECOND, 0);
             startCal.set(Calendar.MILLISECOND, 0);
+
             endCal = (Calendar) startCal.clone();
             endCal.add(Calendar.WEEK_OF_YEAR, 1);
 
@@ -286,6 +292,7 @@ public class HisaabFragment extends Fragment {
             startCal.set(Calendar.MINUTE, 0);
             startCal.set(Calendar.SECOND, 0);
             startCal.set(Calendar.MILLISECOND, 0);
+
             endCal = (Calendar) startCal.clone();
             endCal.add(Calendar.MONTH, 1);
         }
@@ -345,9 +352,6 @@ public class HisaabFragment extends Fragment {
                 .show();
     }
 
-    // Main logic:
-    // 1) add new tx (SALE/EXPENSE)
-    // 2) delete previous tx (receivable/payable)
     private void clearEntry(HisaabItem item, String sourceType) {
         FirebaseUser user = auth.getCurrentUser();
         if (user == null) {
@@ -404,6 +408,42 @@ public class HisaabFragment extends Fragment {
                 );
     }
 
+    private void confirmAndDelete(@NonNull HisaabItem item) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Delete Entry")
+                .setMessage("Kya aap is transaction ko delete karna chahte hain?")
+                .setNegativeButton("Cancel", (d, w) -> d.dismiss())
+                .setPositiveButton("Delete", (d, w) -> deleteEntry(item))
+                .show();
+    }
+
+    private void deleteEntry(@NonNull HisaabItem item) {
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null) {
+            Toast.makeText(requireContext(), "Please login first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String docId = item.getDocId();
+        if (docId == null || docId.trim().isEmpty()) {
+            Toast.makeText(requireContext(), "Cannot delete: missing doc id", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        db.collection("users")
+                .document(user.getUid())
+                .collection("transactions")
+                .document(docId)
+                .delete()
+                .addOnSuccessListener(v -> {
+                    Toast.makeText(requireContext(), "Transaction deleted", Toast.LENGTH_SHORT).show();
+                    loadTransactionsByRange();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(requireContext(), "Delete failed: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                );
+    }
+
     private String safe(String s) {
         return s == null ? "" : s;
     }
@@ -430,13 +470,12 @@ public class HisaabFragment extends Fragment {
         }
     }
 
-    // PAYABLE should be red but NO minus prefix
     private String formatAmountByType(String type, double amount) {
         String amt = String.format(Locale.US, "%,.0f", amount);
 
         if ("SALE".equals(type)) return "+Rs. " + amt;
         if ("EXPENSE".equals(type)) return "-Rs. " + amt;
-        if ("PAYABLE".equals(type)) return "Rs. " + amt; // no minus
+        if ("PAYABLE".equals(type)) return "Rs. " + amt;
         return "Rs. " + amt;
     }
 

@@ -138,7 +138,6 @@ public class ReportsFragment extends Fragment {
         YAxis right = lineChartWeeklySales.getAxisRight();
         right.setEnabled(false);
     }
-
     private void loadReportData() {
         FirebaseUser user = auth.getCurrentUser();
         if (user == null) {
@@ -149,6 +148,7 @@ public class ReportsFragment extends Fragment {
 
         Calendar now = Calendar.getInstance();
 
+        // Setup for Monthly Data
         Calendar monthStart = (Calendar) now.clone();
         monthStart.set(Calendar.DAY_OF_MONTH, 1);
         monthStart.set(Calendar.HOUR_OF_DAY, 0);
@@ -159,6 +159,7 @@ public class ReportsFragment extends Fragment {
         Calendar nextMonthStart = (Calendar) monthStart.clone();
         nextMonthStart.add(Calendar.MONTH, 1);
 
+        // Setup for Weekly Data
         Calendar weekStart = (Calendar) now.clone();
         weekStart.setFirstDayOfWeek(Calendar.MONDAY);
         weekStart.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
@@ -175,6 +176,7 @@ public class ReportsFragment extends Fragment {
         Timestamp weekStartTs = new Timestamp(weekStart.getTime());
         Timestamp nextWeekStartTs = new Timestamp(nextWeekStart.getTime());
 
+        // 1. FETCH MONTHLY TRANSACTIONS & CALCULATE PROJECTION
         db.collection("users")
                 .document(user.getUid())
                 .collection("transactions")
@@ -201,21 +203,32 @@ public class ReportsFragment extends Fragment {
                         }
                     }
 
-                    double profit = sales - expense;
-                    tvProfitProjectionAmount.setText("Rs. " + formatAmount(Math.abs(profit)));
+                    // --- PROJECTION LOGIC START ---
+                    double currentProfit = sales - expense;
+                    Calendar calendar = Calendar.getInstance();
+                    int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+                    int totalDaysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-                    if (profit >= 0) {
+                    // Math: (Total Profit so far / Day of the month) * Days in month
+                    double dailyAverage = currentProfit / Math.max(1, currentDay);
+                    double projectedProfit = dailyAverage * totalDaysInMonth;
+
+                    tvProfitProjectionAmount.setText("Rs. " + formatAmount(Math.abs(projectedProfit)));
+
+                    if (projectedProfit >= 0) {
                         tvProfitProjectionAmount.setTextColor(Color.parseColor("#9FE3C3"));
-                        tvProfitProjectionSub.setText("Expected net gain this month");
+                        tvProfitProjectionSub.setText("Projected net gain for " + totalDaysInMonth + " days");
                     } else {
                         tvProfitProjectionAmount.setTextColor(Color.parseColor("#FFD6D6"));
-                        tvProfitProjectionSub.setText("Expected net loss this month");
+                        tvProfitProjectionSub.setText("Projected net loss for " + totalDaysInMonth + " days");
                     }
+                    // --- PROJECTION LOGIC END ---
 
                     tvAiSummary.setText(buildAiSummary(sales, expense, receivable, payable));
                 })
                 .addOnFailureListener(e -> bindZeroState());
 
+        // 2. FETCH WEEKLY TRANSACTIONS FOR THE CHART
         db.collection("users")
                 .document(user.getUid())
                 .collection("transactions")
@@ -227,14 +240,7 @@ public class ReportsFragment extends Fragment {
                     double weekSales = 0;
                     double[] daySales = new double[7];
 
-                    Calendar weekStartLocal = Calendar.getInstance();
-                    weekStartLocal.setFirstDayOfWeek(Calendar.MONDAY);
-                    weekStartLocal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-                    weekStartLocal.set(Calendar.HOUR_OF_DAY, 0);
-                    weekStartLocal.set(Calendar.MINUTE, 0);
-                    weekStartLocal.set(Calendar.SECOND, 0);
-                    weekStartLocal.set(Calendar.MILLISECOND, 0);
-                    long weekStartMillis = weekStartLocal.getTimeInMillis();
+                    long weekStartMillis = weekStart.getTimeInMillis();
 
                     for (QueryDocumentSnapshot doc : weekSnap) {
                         Double amtObj = doc.getDouble("amount");
@@ -248,7 +254,7 @@ public class ReportsFragment extends Fragment {
 
                             if (ts != null) {
                                 long diff = ts.toDate().getTime() - weekStartMillis;
-                                int dayIndex = (int) (diff / (24L * 60L * 60L * 1000L)); // 0..6
+                                int dayIndex = (int) (diff / (24L * 60L * 60L * 1000L));
                                 if (dayIndex >= 0 && dayIndex < 7) {
                                     daySales[dayIndex] += amtObj;
                                 }
@@ -264,7 +270,6 @@ public class ReportsFragment extends Fragment {
                     bindWeeklyChart(new double[]{0, 0, 0, 0, 0, 0, 0});
                 });
     }
-
     private void bindWeeklyChart(double[] daySales) {
         ArrayList<Entry> entries = new ArrayList<>();
         float max = 0f;

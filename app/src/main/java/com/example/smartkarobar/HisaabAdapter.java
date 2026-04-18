@@ -1,5 +1,6 @@
 package com.example.smartkarobar;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +17,17 @@ public class HisaabAdapter extends RecyclerView.Adapter<HisaabAdapter.VH> {
     public interface ActionListener {
         void onClearUdhaar(@NonNull HisaabItem item);
         void onClearPayable(@NonNull HisaabItem item);
+        void onDelete(@NonNull HisaabItem item);
     }
 
     private final List<HisaabItem> items = new ArrayList<>();
-    private final ActionListener actionListener;
+    private final ActionListener listener;
 
-    public HisaabAdapter(@NonNull ActionListener actionListener) {
-        this.actionListener = actionListener;
+    public HisaabAdapter(@NonNull ActionListener listener) {
+        this.listener = listener;
     }
 
-    public void submitList(List<HisaabItem> newItems) {
+    public void submitList(@NonNull List<HisaabItem> newItems) {
         items.clear();
         items.addAll(newItems);
         notifyDataSetChanged();
@@ -34,8 +36,7 @@ public class HisaabAdapter extends RecyclerView.Adapter<HisaabAdapter.VH> {
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.single_hisaab_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_hisaab_item, parent, false);
         return new VH(v);
     }
 
@@ -43,58 +44,64 @@ public class HisaabAdapter extends RecyclerView.Adapter<HisaabAdapter.VH> {
     public void onBindViewHolder(@NonNull VH h, int position) {
         HisaabItem item = items.get(position);
 
+        String type = (item.getType() != null) ? item.getType().toUpperCase() : "";
+        int color = getResolvedColor(type);
+
         h.tvTitle.setText(item.getTitle());
         h.tvSubtitle.setText(item.getSubtitle());
         h.tvAmount.setText(item.getAmount());
-        h.tvType.setText(item.getType());
-        h.dot.setBackgroundColor(item.getDotColor());
+        h.tvType.setText(type);
 
-        // single type variable (use everywhere below)
-        String type = item.getType() == null ? "" : item.getType().toUpperCase();
-
-        // amount color by TYPE (not by +/- sign)
-        if ("SALE".equals(type)) {
-            h.tvAmount.setTextColor(0xFF2D6A4F); // green
-        } else if ("EXPENSE".equals(type) || "PAYABLE".equals(type)) {
-            h.tvAmount.setTextColor(0xFFD64545); // red
-        } else if ("RECEIVABLE".equals(type)) {
-            h.tvAmount.setTextColor(0xFFF4A261); // orange
-        } else {
-            h.tvAmount.setTextColor(0xFF2F3740); // default
+        // Apply calculated color
+        h.tvAmount.setTextColor(color);
+        if (h.vDot != null && h.vDot.getBackground() != null) {
+            h.vDot.getBackground().setTint(color);
         }
 
-        // default hidden
-        h.btnClearUdhaar.setVisibility(View.GONE);
-        h.btnClearPayable.setVisibility(View.GONE);
+        // Button Visibility Logic
+        h.btnClearUdhaar.setVisibility("RECEIVABLE".equals(type) ? View.VISIBLE : View.GONE);
+        h.btnClearPayable.setVisibility("PAYABLE".equals(type) ? View.VISIBLE : View.GONE);
 
-        if ("RECEIVABLE".equals(type)) {
-            h.btnClearUdhaar.setVisibility(View.VISIBLE);
-            h.btnClearUdhaar.setOnClickListener(v -> actionListener.onClearUdhaar(item));
-        } else if ("PAYABLE".equals(type)) {
-            h.btnClearPayable.setVisibility(View.VISIBLE);
-            h.btnClearPayable.setOnClickListener(v -> actionListener.onClearPayable(item));
+        h.btnClearUdhaar.setOnClickListener(v -> listener.onClearUdhaar(item));
+        h.btnClearPayable.setOnClickListener(v -> listener.onClearPayable(item));
+        h.btnDelete.setOnClickListener(v -> listener.onDelete(item));
+    }
+
+    // Helper method inside Adapter to match your Fragment's color logic
+    private int getResolvedColor(String type) {
+        switch (type) {
+            case "SALE":
+                return Color.parseColor("#2D6A4F");
+            case "RECEIVABLE":
+                return Color.parseColor("#F4A261");
+            case "EXPENSE":
+            case "PAYABLE":
+                return Color.parseColor("#D64545");
+            default:
+                return Color.parseColor("#2F3740");
         }
     }
+
     @Override
     public int getItemCount() {
         return items.size();
     }
 
     static class VH extends RecyclerView.ViewHolder {
-        View dot;
+        View vDot;
         TextView tvTitle, tvSubtitle, tvAmount, tvType;
-        TextView btnClearUdhaar, btnClearPayable;
+        TextView btnClearUdhaar, btnClearPayable, btnDelete;
 
         VH(@NonNull View itemView) {
             super(itemView);
-            dot = itemView.findViewById(R.id.vDot);
+            vDot = itemView.findViewById(R.id.vDot);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvSubtitle = itemView.findViewById(R.id.tvSubtitle);
             tvAmount = itemView.findViewById(R.id.tvAmount);
             tvType = itemView.findViewById(R.id.tvType);
-
             btnClearUdhaar = itemView.findViewById(R.id.btnClearUdhaar);
             btnClearPayable = itemView.findViewById(R.id.btnClearPayable);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
 }
