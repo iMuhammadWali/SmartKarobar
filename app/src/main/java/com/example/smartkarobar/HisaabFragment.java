@@ -1,10 +1,12 @@
 package com.example.smartkarobar;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +32,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class HisaabFragment extends Fragment {
-    TextView tvTransactionCount, tvAll, tvSales, tvReceiveables, tvExpenses;
+    TextView tvTransactionCount, tvAll, tvSales, tvReceivables, tvExpenses;
+    ImageView ivProfile;
     private ArrayList<HisaabItem> allTransactions = new ArrayList<>();
     HisaabAdapter adapter;
 
@@ -44,15 +48,16 @@ public class HisaabFragment extends Fragment {
     private void init(View v){
         tvTransactionCount = v.findViewById(R.id.tvTransactionsCount);
         tvExpenses = v.findViewById(R.id.tvExpenses);
-        tvReceiveables = v.findViewById(R.id.tvReceivables);
+        tvReceivables = v.findViewById(R.id.tvReceivables);
         tvSales = v.findViewById(R.id.tvSales);
         tvAll = v.findViewById(R.id.tvAll);
+        ivProfile = v.findViewById(R.id.ivProfile);
     }
 
     private void updateChipUI(String selected) {
         tvAll.setBackgroundResource(selected.equals("ALL") ? R.drawable.bg_nav_selected : R.drawable.bg_rounded_very_light_green);
         tvSales.setBackgroundResource(selected.equals("SALE") ? R.drawable.bg_nav_selected : R.drawable.bg_rounded_very_light_green);
-        tvReceiveables.setBackgroundResource(selected.equals("RECEIVABLE") ? R.drawable.bg_nav_selected : R.drawable.bg_rounded_very_light_green);
+        tvReceivables.setBackgroundResource(selected.equals("RECEIVABLE") ? R.drawable.bg_nav_selected : R.drawable.bg_rounded_very_light_green);
         tvExpenses.setBackgroundResource(selected.equals("EXPENSE") ? R.drawable.bg_nav_selected : R.drawable.bg_rounded_very_light_green);
 
         int sel = Color.WHITE;
@@ -60,7 +65,7 @@ public class HisaabFragment extends Fragment {
 
         tvAll.setTextColor(selected.equals("ALL") ? sel : unsel);
         tvSales.setTextColor(selected.equals("SALE") ? sel : unsel);
-        tvReceiveables.setTextColor(selected.equals("RECEIVABLE") ? sel : unsel);
+        tvReceivables.setTextColor(selected.equals("RECEIVABLE") ? sel : unsel);
         tvExpenses.setTextColor(selected.equals("EXPENSE") ? sel : unsel);
     }
 
@@ -84,9 +89,34 @@ public class HisaabFragment extends Fragment {
 
     private void applyListeners(){
         tvExpenses.setOnClickListener(v -> applyFilter("EXPENSE"));
-        tvReceiveables.setOnClickListener(v -> applyFilter("RECEIVABLE"));
+        tvReceivables.setOnClickListener(v -> applyFilter("RECEIVABLE"));
         tvAll.setOnClickListener(v -> applyFilter("ALL"));
         tvSales.setOnClickListener(v -> applyFilter("SALE"));
+
+        ivProfile.setOnClickListener(v -> {
+            final String[] options = {"Logout"};
+
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Choose Option")
+                    .setItems(options, (dialog, which) -> {
+                        if (which == 0) { // Logout
+                            new AlertDialog.Builder(requireContext())
+                                    .setTitle("Logout")
+                                    .setMessage("Are you sure you want to logout?")
+                                    .setNegativeButton("Cancel", (d, w) -> d.dismiss())
+                                    .setPositiveButton("Logout", (d, w) -> {
+                                        FirebaseAuth.getInstance().signOut();
+
+                                        Intent i = new Intent(requireActivity(), SignupActivity.class);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(i);
+                                        requireActivity().finish();
+                                    })
+                                    .show();
+                        }
+                    })
+                    .show();
+        });
     }
 
     @Override

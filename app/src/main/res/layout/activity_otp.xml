@@ -12,6 +12,7 @@
     android:paddingBottom="20dp"
     tools:context=".OtpActivity">
 
+<!--    TODO: Replace the circles with Input FIELD-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Enter Secure PIN"
+            android:text="Enter OTP"
             android:textColor="#9EC5B4"
             android:textSize="16sp"
             android:textStyle="bold"

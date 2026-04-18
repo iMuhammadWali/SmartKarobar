@@ -216,7 +216,7 @@
 
 
                     <LinearLayout
-                        android:id="@+id/btnSupplier"
+                        android:id="@+id/btnPayable"
                         android:layout_width="0dp"
                         android:layout_height="64dp"
                         android:layout_weight="1"
@@ -226,17 +226,17 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/ivSupplier"
+                            android:id="@+id/ivPayable"
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:src="@drawable/ic_wallet"
                             app:tint="#2D6A4F" />
 
                         <TextView
-                            android:id="@+id/tvSupplier"
+                            android:id="@+id/tvPayable"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="SUPPLIER"
+                            android:text="PAYABLE"
                             android:textColor="#2F3740"
                             android:textSize="10sp"
                             android:textStyle="bold" />

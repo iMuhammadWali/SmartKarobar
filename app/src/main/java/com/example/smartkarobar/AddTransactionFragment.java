@@ -32,10 +32,10 @@ public class AddTransactionFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private LinearLayout btnSale, btnReceivable, btnSupplier, btnExpense, layoutUdhaarFields, btnSaveTransaction;
+    private LinearLayout btnSale, btnReceivable, btnPayable, btnExpense, layoutUdhaarFields, btnSaveTransaction;
     private EditText etAmount, etDescription, etCustomerName, etCustomerPhone;
-    private ImageView ivSale, ivReceivable, ivSupplier, ivExpense, ivBack;
-    private TextView tvSale, tvReceivable, tvSupplier, tvExpense;
+    private ImageView ivSale, ivReceivable, ivPayable, ivExpense, ivBack;
+    private TextView tvSale, tvReceivable, tvPayable, tvExpense;
 
     private String selectedCategory = "RECEIVABLE";
     private boolean isSaving = false;
@@ -73,7 +73,7 @@ public class AddTransactionFragment extends Fragment {
     private void init(View v) {
         btnSale = v.findViewById(R.id.btnSale);
         btnReceivable = v.findViewById(R.id.btnReceivable);
-        btnSupplier = v.findViewById(R.id.btnSupplier);
+        btnPayable = v.findViewById(R.id.btnPayable);
         btnExpense = v.findViewById(R.id.btnExpense);
 
         layoutUdhaarFields = v.findViewById(R.id.layoutUdhaarFields);
@@ -90,8 +90,8 @@ public class AddTransactionFragment extends Fragment {
         ivReceivable = v.findViewById(R.id.ivReceivable);
         tvReceivable = v.findViewById(R.id.tvReceivable);
 
-        ivSupplier = v.findViewById(R.id.ivSupplier);
-        tvSupplier = v.findViewById(R.id.tvSupplier);
+        ivPayable = v.findViewById(R.id.ivPayable);
+        tvPayable = v.findViewById(R.id.tvPayable);
 
         ivExpense = v.findViewById(R.id.ivExpense);
         tvExpense = v.findViewById(R.id.tvExpense);
@@ -102,7 +102,7 @@ public class AddTransactionFragment extends Fragment {
     private void applyListeners() {
         btnSale.setOnClickListener(v -> setCategory("SALE"));
         btnReceivable.setOnClickListener(v -> setCategory("RECEIVABLE"));
-        btnSupplier.setOnClickListener(v -> setCategory("SUPPLIER"));
+        btnPayable.setOnClickListener(v -> setCategory("PAYABLE"));
         btnExpense.setOnClickListener(v -> setCategory("EXPENSE"));
 
         btnSaveTransaction.setOnClickListener(v -> onSaveClicked());
@@ -132,7 +132,7 @@ public class AddTransactionFragment extends Fragment {
 
         applyCategoryStyle(btnSale, ivSale, tvSale, false, selectedBg, unselectedBg, selectedText, unselectedText, selectedIcon, unselectedIcon);
         applyCategoryStyle(btnReceivable, ivReceivable, tvReceivable, false, selectedBg, unselectedBg, selectedText, unselectedText, selectedIcon, unselectedIcon);
-        applyCategoryStyle(btnSupplier, ivSupplier, tvSupplier, false, selectedBg, unselectedBg, selectedText, unselectedText, selectedIcon, unselectedIcon);
+        applyCategoryStyle(btnPayable, ivPayable, tvPayable, false, selectedBg, unselectedBg, selectedText, unselectedText, selectedIcon, unselectedIcon);
         applyCategoryStyle(btnExpense, ivExpense, tvExpense, false, selectedBg, unselectedBg, selectedText, unselectedText, selectedIcon, unselectedIcon);
 
         switch (category) {
@@ -142,8 +142,8 @@ public class AddTransactionFragment extends Fragment {
             case "RECEIVABLE":
                 applyCategoryStyle(btnReceivable, ivReceivable, tvReceivable, true, selectedBg, unselectedBg, selectedText, unselectedText, selectedIcon, unselectedIcon);
                 break;
-            case "SUPPLIER":
-                applyCategoryStyle(btnSupplier, ivSupplier, tvSupplier, true, selectedBg, unselectedBg, selectedText, unselectedText, selectedIcon, unselectedIcon);
+            case "PAYABLE":
+                applyCategoryStyle(btnPayable, ivPayable, tvPayable, true, selectedBg, unselectedBg, selectedText, unselectedText, selectedIcon, unselectedIcon);
                 break;
             case "EXPENSE":
                 applyCategoryStyle(btnExpense, ivExpense, tvExpense, true, selectedBg, unselectedBg, selectedText, unselectedText, selectedIcon, unselectedIcon);
