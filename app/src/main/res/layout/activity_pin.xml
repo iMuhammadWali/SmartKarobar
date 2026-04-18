@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#184C3A"
+    android:paddingLeft="20dp"
+    android:paddingTop="24dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="20dp"
+    tools:context=".PinActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+        <!-- Logo box -->
+        <LinearLayout
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_shield"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgShield"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_shield"
+                android:contentDescription="Shield" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="SmartKarobar"
+            android:textColor="#D8F3DC"
+            android:textSize="38sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Enter Secure PIN"
+            android:textColor="#9EC5B4"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal" />
+
+        <!-- PIN dots -->
+        <LinearLayout
+            android:id="@+id/pinDotsLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+
+            <View
+                android:id="@+id/dot1"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_pin_dot_empty" />
+
+            <View
+                android:id="@+id/dot2"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_pin_dot_empty" />
+
+            <View
+                android:id="@+id/dot3"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_pin_dot_empty" />
+
+            <View
+                android:id="@+id/dot4"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_pin_dot_empty" />
+        </LinearLayout>
+
+        <!-- Keypad -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!-- Row 1 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn1"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_margin="8dp"
+                    android:text="1"
+                    android:textColor="#D8F3DC"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_keypad_circle" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn2"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_margin="8dp"
+                    android:text="2"
+                    android:textColor="#D8F3DC"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_keypad_circle" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn3"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_margin="8dp"
+                    android:text="3"
+                    android:textColor="#D8F3DC"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_keypad_circle" />
+            </LinearLayout>
+
+            <!-- Row 2 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn4"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_margin="8dp"
+                    android:text="4"
+                    android:textColor="#D8F3DC"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_keypad_circle" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn5"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_margin="8dp"
+                    android:text="5"
+                    android:textColor="#D8F3DC"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_keypad_circle" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn6"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_margin="8dp"
+                    android:text="6"
+                    android:textColor="#D8F3DC"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_keypad_circle" />
+            </LinearLayout>
+
+            <!-- Row 3 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn7"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_margin="8dp"
+                    android:text="7"
+                    android:textColor="#D8F3DC"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_keypad_circle" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn8"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_margin="8dp"
+                    android:text="8"
+                    android:textColor="#D8F3DC"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_keypad_circle" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn9"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_margin="8dp"
+                    android:text="9"
+                    android:textColor="#D8F3DC"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_keypad_circle" />
+            </LinearLayout>
+
+            <!-- Row 4 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_margin="8dp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn0"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_margin="8dp"
+                    android:text="0"
+                    android:textColor="#D8F3DC"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_keypad_circle" />
+
+                <ImageButton
+                    android:id="@+id/btnBackspace"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/bg_keypad_circle"
+                    android:src="@drawable/ic_backspace"
+                    android:contentDescription="Backspace"
+                    android:padding="22dp"
+                    android:scaleType="fitCenter"
+                    app:tint="#D8F3DC" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvForgotPin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="FORGOT PIN?"
+            android:textColor="#7FAE9B"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+</LinearLayout>
