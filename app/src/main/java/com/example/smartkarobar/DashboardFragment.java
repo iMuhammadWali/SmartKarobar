@@ -22,7 +22,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -32,13 +31,15 @@ public class DashboardFragment extends Fragment {
 
     private LinearLayout btnAddTransaction;
     private TextView tvSalesAmount, tvExpensesAmount, tvReceivablesAmount, tvPayablesAmount, tvNetCashAmount;
-
     private ImageView ivProfile;
+    private TextView tvUsername;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
-    private void applyListeners(){
+
+    private void applyListeners() {
         btnAddTransaction.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
@@ -46,20 +47,20 @@ public class DashboardFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
+
         ivProfile.setOnClickListener(v -> {
             final String[] options = {"Logout"};
 
             new AlertDialog.Builder(requireContext())
                     .setTitle("Choose Option")
                     .setItems(options, (dialog, which) -> {
-                        if (which == 0) { // Logout
+                        if (which == 0) {
                             new AlertDialog.Builder(requireContext())
                                     .setTitle("Logout")
                                     .setMessage("Are you sure you want to logout?")
                                     .setNegativeButton("Cancel", (d, w) -> d.dismiss())
                                     .setPositiveButton("Logout", (d, w) -> {
                                         FirebaseAuth.getInstance().signOut();
-
                                         Intent i = new Intent(requireActivity(), SignupActivity.class);
                                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(i);
@@ -71,17 +72,21 @@ public class DashboardFragment extends Fragment {
                     .show();
         });
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
         applyListeners();
+
+        loadUsername();             // <-- add this
         loadThisMonthDashboard();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        loadUsername();             // <-- and this
         loadThisMonthDashboard();
     }
 
@@ -93,6 +98,34 @@ public class DashboardFragment extends Fragment {
         tvPayablesAmount = v.findViewById(R.id.tvPayablesAmount);
         tvNetCashAmount = v.findViewById(R.id.tvNetCashAmount);
         ivProfile = v.findViewById(R.id.ivProfile);
+        tvUsername = v.findViewById(R.id.tvUsername);
+    }
+
+    private void loadUsername() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            tvUsername.setText("Guest");
+            return;
+        }
+
+        String uid = user.getUid();
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(uid)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    String username = "";
+                    if (doc.exists() && doc.getString("username") != null) {
+                        username = doc.getString("username").trim();
+                    }
+
+                    if (username.isEmpty()) {
+                        tvUsername.setText("User");
+                    } else {
+                        tvUsername.setText(username);
+                    }
+                })
+                .addOnFailureListener(e -> tvUsername.setText("User"));
     }
 
     private void loadThisMonthDashboard() {
@@ -131,6 +164,7 @@ public class DashboardFragment extends Fragment {
                         Toast.makeText(requireContext(), "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
     }
+
     private void bindSnapshotToUi(QuerySnapshot queryDocumentSnapshots) {
         double saleTotal = 0;
         double receivableTotal = 0;
@@ -161,9 +195,7 @@ public class DashboardFragment extends Fragment {
             }
         }
 
-        // Net cash: sales - expenses;
         double netCash = saleTotal - expenseTotal;
-
         setAllAmounts(saleTotal, expenseTotal, receivableTotal, payableTotal, netCash);
     }
 

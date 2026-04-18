@@ -275,16 +275,5 @@
                     app:tint="#D8F3DC" />
             </LinearLayout>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvForgotPin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="FORGOT PIN?"
-            android:textColor="#7FAE9B"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal" />
     </LinearLayout>
 </LinearLayout>

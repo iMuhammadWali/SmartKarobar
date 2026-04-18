@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="10dp"
-            android:text="Wali"
+            android:text="User"
             android:textColor="#E8F5EE"
             android:textSize="18sp"
             android:textStyle="bold"
