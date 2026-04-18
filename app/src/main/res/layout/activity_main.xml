@@ -14,6 +14,7 @@
         android:layout_weight="1" />
 
     <!-- Custom Bottom Nav -->
+
     <LinearLayout
         android:id="@+id/customBottomNav"
         android:layout_width="match_parent"
@@ -26,7 +27,7 @@
 
         <!-- Ghar -->
         <LinearLayout
-            android:id="@+id/tabHome"
+            android:id="@+id/tabGhar"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_weight="1"
@@ -36,13 +37,14 @@
             android:padding="6dp">
 
             <ImageView
-                android:id="@+id/iconHome"
+                android:id="@+id/ivGhar"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_home"
                 app:tint="#D8F3DC" />
 
             <TextView
+                android:id="@+id/tvGhar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
@@ -63,14 +65,14 @@
             android:padding="6dp">
 
             <ImageView
-                android:id="@+id/iconHisaab"
+                android:id="@+id/ivHisaab"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_hisaab"
                 app:tint="#2D6A4F" />
 
             <TextView
-                android:id="@+id/textHisaab"
+                android:id="@+id/tvHisaab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
@@ -91,14 +93,14 @@
             android:padding="6dp">
 
             <ImageView
-                android:id="@+id/iconReports"
+                android:id="@+id/ivReports"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_reports"
                 app:tint="#2D6A4F" />
 
             <TextView
-                android:id="@+id/textReports"
+                android:id="@+id/tvReports"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
