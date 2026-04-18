@@ -68,7 +68,7 @@
                 android:id="@+id/cardNetCash"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_card_white_20"
+                android:background="@drawable/bg_rounded_white_card"
                 android:orientation="vertical"
                 android:padding="18dp"
                 android:layout_marginBottom="14dp">
@@ -88,7 +88,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Net Cash Position"
+                            android:text="Net Cash Position (This Month)"
                             android:textColor="#48505A"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -107,7 +107,7 @@
                         android:layout_width="38dp"
                         android:layout_height="38dp"
                         android:gravity="center"
-                        android:background="@drawable/bg_round_very_light_green">
+                        android:background="@drawable/bg_rounded_very_light_green">
 
                         <ImageView
                             android:layout_width="28dp"
@@ -171,7 +171,7 @@
                     android:layout_height="140dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    android:background="@drawable/bg_card_white_20"
+                    android:background="@drawable/bg_rounded_white_card"
                     android:orientation="vertical"
                     android:padding="14dp">
 
@@ -219,7 +219,7 @@
                     android:layout_height="140dp"
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_card_white_20"
+                    android:background="@drawable/bg_rounded_white_card"
                     android:orientation="vertical"
                     android:padding="14dp">
 
@@ -276,7 +276,7 @@
                     android:layout_height="140dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    android:background="@drawable/bg_card_white_20"
+                    android:background="@drawable/bg_rounded_white_card"
                     android:orientation="vertical"
                     android:padding="14dp">
 
@@ -326,7 +326,7 @@
                     android:layout_height="140dp"
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_card_white_20"
+                    android:background="@drawable/bg_rounded_white_card"
                     android:orientation="vertical"
                     android:padding="14dp">
 
@@ -390,7 +390,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_btn_red_16"
+            android:background="@drawable/bg_rounded_dark_red"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -417,7 +417,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:background="@drawable/bg_btn_green_16"
+            android:background="@drawable/bg_rounded_dark_green"
             android:gravity="center"
             android:orientation="vertical">
 

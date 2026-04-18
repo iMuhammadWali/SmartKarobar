@@ -30,6 +30,8 @@ public class HisaabFragment extends Fragment {
 
     TextView tvTransactionCount, tvAll, tvSales, tvReceiveables, tvExpenses;
 
+    private ArrayList<HisaabItem> allTransactions = new ArrayList<>();
+    HisaabAdapter adapter;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -69,26 +71,75 @@ public class HisaabFragment extends Fragment {
         tvSales = v.findViewById(R.id.tvSales);
         tvAll = v.findViewById(R.id.tvAll);
     }
+
+    private void updateChipUI(String selected) {
+        tvAll.setBackgroundResource(selected.equals("ALL") ? R.drawable.bg_nav_selected : R.drawable.bg_rounded_very_light_green);
+        tvSales.setBackgroundResource(selected.equals("SALE") ? R.drawable.bg_nav_selected : R.drawable.bg_rounded_very_light_green);
+        tvReceiveables.setBackgroundResource(selected.equals("RECEIVABLE") ? R.drawable.bg_nav_selected : R.drawable.bg_rounded_very_light_green);
+        tvExpenses.setBackgroundResource(selected.equals("EXPENSE") ? R.drawable.bg_nav_selected : R.drawable.bg_rounded_very_light_green);
+
+        int sel = Color.WHITE;
+        int unsel = Color.parseColor("#2D6A4F");
+
+        tvAll.setTextColor(selected.equals("ALL") ? sel : unsel);
+        tvSales.setTextColor(selected.equals("SALE") ? sel : unsel);
+        tvReceiveables.setTextColor(selected.equals("RECEIVABLE") ? sel : unsel);
+        tvExpenses.setTextColor(selected.equals("EXPENSE") ? sel : unsel);
+    }
+    private void applyFilter(String type) {
+        ArrayList<HisaabItem> filtered = new ArrayList<>();
+
+        if (type.equals("ALL")) {
+            filtered.addAll(allTransactions);
+        } else {
+            for (HisaabItem item : allTransactions) {
+                if (item.getType().equalsIgnoreCase(type)) {
+                    filtered.add(item);
+                }
+            }
+        }
+
+        adapter.submitList(filtered);
+        tvTransactionCount.setText(filtered.size() + " TRANSACTIONS");
+        updateChipUI(type);
+    }
+    private void applyListeners(){
+        tvExpenses.setOnClickListener((v)->{
+            applyFilter("EXPENSE");
+        });
+        tvReceiveables.setOnClickListener((v)->{
+            applyFilter("RECEIVABLE");
+        });
+        tvAll.setOnClickListener((v)->{
+            applyFilter("ALL");
+        });
+        tvSales.setOnClickListener((v)->{
+            applyFilter("SALE");
+        });
+
+
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
-        ArrayList<HisaabItem> transactions = getTransactions();
-        tvTransactionCount.setText(transactions.size() + " TRANSACTIONS");
+        allTransactions = getTransactions();
 
         RecyclerView rv = view.findViewById(R.id.rvHisaab);
-        HisaabAdapter adapter = new HisaabAdapter();
+        adapter = new HisaabAdapter();
 
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
         rv.setAdapter(adapter);
-        adapter.submitList(transactions);
+        applyFilter("ALL");
 
+        applyListeners();
     }
     private ArrayList<HisaabItem> getTransactions() {
+
         // TODO: Fetch today's transactions from firebase.
         ArrayList<HisaabItem> list = new ArrayList<>();
         list.add(new HisaabItem("General Store Sale", "Aaj, 2:30pm", "+Rs. 5,000", "SALE", Color.parseColor("#2D6A4F")));
-        list.add(new HisaabItem("Ali ka Udhaar", "Aaj, 1:16pm", "Rs. 2,500", "UDHAAR", Color.parseColor("#F4A261")));
+        list.add(new HisaabItem("Ali ka Udhaar", "Aaj, 1:16pm", "Rs. 2,500", "RECEIVABLE", Color.parseColor("#F4A261")));
         list.add(new HisaabItem("Bijli ka Bill", "Aaj, 10:45am", "-Rs. 1,200", "EXPENSE", Color.parseColor("#D64545")));
         list.add(new HisaabItem("Inventory Purchase", "Kal, 5:00pm", "-Rs. 8,000", "EXPENSE", Color.parseColor("#D64545")));
         return list;
