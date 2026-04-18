@@ -13,57 +13,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HisaabFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HisaabFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     TextView tvTransactionCount, tvAll, tvSales, tvReceiveables, tvExpenses;
-
     private ArrayList<HisaabItem> allTransactions = new ArrayList<>();
     HisaabAdapter adapter;
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    public HisaabFragment() {
-        // Required empty public constructor
-    }
-
-    public static HisaabFragment newInstance(String param1, String param2) {
-        HisaabFragment fragment = new HisaabFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public HisaabFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_hisaab, container, false);
     }
+
     private void init(View v){
         tvTransactionCount = v.findViewById(R.id.tvTransactionsCount);
         tvExpenses = v.findViewById(R.id.tvExpenses);
@@ -86,6 +63,7 @@ public class HisaabFragment extends Fragment {
         tvReceiveables.setTextColor(selected.equals("RECEIVABLE") ? sel : unsel);
         tvExpenses.setTextColor(selected.equals("EXPENSE") ? sel : unsel);
     }
+
     private void applyFilter(String type) {
         ArrayList<HisaabItem> filtered = new ArrayList<>();
 
@@ -103,45 +81,142 @@ public class HisaabFragment extends Fragment {
         tvTransactionCount.setText(filtered.size() + " TRANSACTIONS");
         updateChipUI(type);
     }
+
     private void applyListeners(){
-        tvExpenses.setOnClickListener((v)->{
-            applyFilter("EXPENSE");
-        });
-        tvReceiveables.setOnClickListener((v)->{
-            applyFilter("RECEIVABLE");
-        });
-        tvAll.setOnClickListener((v)->{
-            applyFilter("ALL");
-        });
-        tvSales.setOnClickListener((v)->{
-            applyFilter("SALE");
-        });
-
-
+        tvExpenses.setOnClickListener(v -> applyFilter("EXPENSE"));
+        tvReceiveables.setOnClickListener(v -> applyFilter("RECEIVABLE"));
+        tvAll.setOnClickListener(v -> applyFilter("ALL"));
+        tvSales.setOnClickListener(v -> applyFilter("SALE"));
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
-        allTransactions = getTransactions();
 
         RecyclerView rv = view.findViewById(R.id.rvHisaab);
         adapter = new HisaabAdapter();
-
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
         rv.setAdapter(adapter);
-        applyFilter("ALL");
 
         applyListeners();
+        loadTodayTransactions();
     }
-    private ArrayList<HisaabItem> getTransactions() {
 
-        // TODO: Fetch today's transactions from firebase.
-        ArrayList<HisaabItem> list = new ArrayList<>();
-        list.add(new HisaabItem("General Store Sale", "Aaj, 2:30pm", "+Rs. 5,000", "SALE", Color.parseColor("#2D6A4F")));
-        list.add(new HisaabItem("Ali ka Udhaar", "Aaj, 1:16pm", "Rs. 2,500", "RECEIVABLE", Color.parseColor("#F4A261")));
-        list.add(new HisaabItem("Bijli ka Bill", "Aaj, 10:45am", "-Rs. 1,200", "EXPENSE", Color.parseColor("#D64545")));
-        list.add(new HisaabItem("Inventory Purchase", "Kal, 5:00pm", "-Rs. 8,000", "EXPENSE", Color.parseColor("#D64545")));
-        return list;
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadTodayTransactions();
+    }
+
+    private void loadTodayTransactions() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            allTransactions.clear();
+            applyFilter("ALL");
+            Toast.makeText(requireContext(), "Please login first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String uid = user.getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Start of today
+        Calendar startCal = Calendar.getInstance();
+        startCal.set(Calendar.HOUR_OF_DAY, 0);
+        startCal.set(Calendar.MINUTE, 0);
+        startCal.set(Calendar.SECOND, 0);
+        startCal.set(Calendar.MILLISECOND, 0);
+
+        // Start of tomorrow (exclusive)
+        Calendar endCal = (Calendar) startCal.clone();
+        endCal.add(Calendar.DAY_OF_MONTH, 1);
+
+        Timestamp startTs = new Timestamp(startCal.getTime());
+        Timestamp endTs = new Timestamp(endCal.getTime());
+
+        db.collection("users")
+                .document(uid)
+                .collection("transactions")
+                .whereGreaterThanOrEqualTo("createdAt", startTs)
+                .whereLessThan("createdAt", endTs)
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(snap -> {
+                    ArrayList<HisaabItem> list = new ArrayList<>();
+
+                    for (QueryDocumentSnapshot doc : snap) {
+                        Double amountObj = doc.getDouble("amount");
+                        if (amountObj == null) continue;
+
+                        double amount = amountObj;
+                        String type = safe(doc.getString("category"));
+                        String description = safe(doc.getString("description"));
+                        String customerName = safe(doc.getString("customerName"));
+
+                        Timestamp createdAt = doc.getTimestamp("createdAt");
+                        String timeText = buildTimeText(createdAt);
+
+                        String title = description.isEmpty() ? defaultTitle(type, customerName) : description;
+                        String amountText = formatAmountByType(type, amount);
+                        int amountColor = getAmountColor(type);
+
+                        list.add(new HisaabItem(title, timeText, amountText, type, amountColor));
+                    }
+
+                    allTransactions = list;
+                    applyFilter("ALL");
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "Failed to load: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private String safe(String s) {
+        return s == null ? "" : s;
+    }
+
+    private String buildTimeText(Timestamp timestamp) {
+        if (timestamp == null) return "Aaj";
+        Date d = timestamp.toDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("h:mma", Locale.getDefault());
+        return "Aaj, " + sdf.format(d).toLowerCase(Locale.getDefault());
+    }
+
+    private String defaultTitle(String type, String customerName) {
+        switch (type) {
+            case "SALE":
+                return "Sale Entry";
+            case "RECEIVABLE":
+                return customerName.isEmpty() ? "Udhaar Entry" : customerName + " ka Udhaar";
+            case "EXPENSE":
+                return "Expense Entry";
+            case "SUPPLIER":
+                return "Supplier Payment";
+            default:
+                return "Transaction";
+        }
+    }
+
+    private String formatAmountByType(String type, double amount) {
+        String amt = String.format(Locale.US, "%,.0f", amount);
+
+        if ("SALE".equals(type)) return "+Rs. " + amt;
+        if ("EXPENSE".equals(type) || "SUPPLIER".equals(type)) return "-Rs. " + amt;
+        return "Rs. " + amt;
+    }
+
+    private int getAmountColor(String type) {
+        switch (type) {
+            case "SALE":
+                return Color.parseColor("#2D6A4F");
+            case "RECEIVABLE":
+                return Color.parseColor("#F4A261");
+            case "EXPENSE":
+            case "SUPPLIER":
+                return Color.parseColor("#D64545");
+            default:
+                return Color.parseColor("#2F3740");
+        }
     }
 }

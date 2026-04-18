@@ -20,7 +20,7 @@
         android:background="#2D6A4F">
 
         <ImageView
-            android:id="@+id/ivProfileTop"
+            android:id="@+id/ivProfile"
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:src="@drawable/ic_profile_avatar"
@@ -122,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:text="Rs. 125,500"
+                    android:text="Net amount"
                     android:textColor="#1F2937"
                     android:textSize="44sp"
                     android:textStyle="bold" />
@@ -198,7 +198,7 @@
                         android:id="@+id/tvSalesAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rs. 50,000"
+                        android:text="Sales"
                         android:textColor="#2D6A4F"
                         android:textSize="28sp"
                         android:textStyle="bold" />
@@ -244,10 +244,10 @@
                         android:layout_weight="1" />
 
                     <TextView
-                        android:id="@+id/tvExpenseAmount"
+                        android:id="@+id/tvExpensesAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rs. 12,000"
+                        android:text="Expenses"
                         android:textColor="#D64545"
                         android:textSize="28sp"
                         android:textStyle="bold" />
@@ -305,7 +305,7 @@
                         android:id="@+id/tvReceivablesAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rs. 85,000"
+                        android:text="Receivables"
                         android:textColor="#2F3740"
                         android:textSize="28sp"
                         android:textStyle="bold" />
@@ -355,7 +355,7 @@
                         android:id="@+id/tvPayablesAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rs. 9,500"
+                        android:text="Payables"
                         android:textColor="#2F3740"
                         android:textSize="28sp"
                         android:textStyle="bold" />

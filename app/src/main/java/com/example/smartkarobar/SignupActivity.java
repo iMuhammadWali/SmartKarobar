@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.Firebase;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -38,6 +39,12 @@ public class SignupActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // already logged in
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
         init();
         applyListeners();
     }
@@ -82,9 +89,7 @@ public class SignupActivity extends AppCompatActivity {
                                        @NonNull PhoneAuthProvider.ForceResendingToken token) {
                     Toast.makeText(SignupActivity.this, "OTP Sent!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SignupActivity.this, OtpActivity.class);
-
-                    // Pass the verificationId so the next activity can verify the input
-
+                    // Pass the verificationId so the OtpActivity can verify the input
                     intent.putExtra("vId", verificationId);
                     startActivity(intent);
                 }

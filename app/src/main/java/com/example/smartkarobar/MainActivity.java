@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +15,16 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class MainActivity extends AppCompatActivity {
     private LinearLayout tabGhar, tabHisaab, tabReports;
     private ImageView ivGhar, ivHisaab, ivReports;
     private TextView tvGhar, tvHisaab, tvReports;
 
+    FirebaseAuth auth;
+    FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +36,14 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         init();
-        // default fragment
+
+        // load the default fragment
         if (savedInstanceState == null) {
             switchTab(new DashboardFragment(), "GHAR");
         }
         applyNavbarListeners();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
     }
     private void init(){
         tabGhar = findViewById(R.id.tabGhar);

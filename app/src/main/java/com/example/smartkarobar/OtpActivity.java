@@ -116,7 +116,7 @@ public class OtpActivity extends AppCompatActivity {
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(OtpActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
