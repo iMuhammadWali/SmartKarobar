@@ -9,6 +9,7 @@
     tools:context=".DashboardFragment">
 
 <!--    Top bar -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="76dp"
@@ -28,12 +29,12 @@
             android:padding="2dp" />
 
         <TextView
-            android:id="@+id/tvGreetingTop"
+            android:id="@+id/tvUsername"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="10dp"
-            android:text="Assalam o Alaikum\nWali 👋"
+            android:text="Wali"
             android:textColor="#E8F5EE"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -44,6 +45,7 @@
                 android:layout_height="20dp"
                 android:src="@drawable/ic_shield" />
     </LinearLayout>
+
 <!--    Body -->
     <ScrollView
         android:layout_width="match_parent"
@@ -105,7 +107,7 @@
                         android:layout_width="38dp"
                         android:layout_height="38dp"
                         android:gravity="center"
-                        android:background="@drawable/bg_light_green_round_12">
+                        android:background="@drawable/bg_round_very_light_green">
 
                         <ImageView
                             android:layout_width="28dp"
