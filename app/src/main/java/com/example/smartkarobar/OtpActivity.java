@@ -2,12 +2,11 @@ package com.example.smartkarobar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
@@ -24,7 +23,7 @@ public class OtpActivity extends AppCompatActivity {
     private String verificationId;
     private FirebaseAuth auth;
 
-    private View dot1, dot2, dot3, dot4, dot5, dot6;
+    private TextView dot1, dot2, dot3, dot4, dot5, dot6;
     private AppCompatButton btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
     private ImageButton btnBackspace;
 
@@ -47,7 +46,7 @@ public class OtpActivity extends AppCompatActivity {
 
         init();
         setupListeners();
-        updatePinDots();
+        updatePinDigits();
     }
 
     private void init() {
@@ -73,7 +72,7 @@ public class OtpActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        View.OnClickListener digitListener = v -> {
+        android.view.View.OnClickListener digitListener = v -> {
             AppCompatButton b = (AppCompatButton) v;
             onDigitPressed(b.getText().toString());
         };
@@ -93,7 +92,7 @@ public class OtpActivity extends AppCompatActivity {
             int len = enteredPin.length();
             if (len > 0) {
                 enteredPin.deleteCharAt(len - 1);
-                updatePinDots();
+                updatePinDigits();
             }
         });
     }
@@ -101,7 +100,7 @@ public class OtpActivity extends AppCompatActivity {
     private void onDigitPressed(String digit) {
         if (enteredPin.length() < 6) {
             enteredPin.append(digit);
-            updatePinDots();
+            updatePinDigits();
 
             if (enteredPin.length() == 6) {
                 verifyOtpWithFirebase(enteredPin.toString());
@@ -116,30 +115,36 @@ public class OtpActivity extends AppCompatActivity {
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-//                        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(OtpActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
-                        // Reset dots and show error if OTP is wrong
+                        // Reset digits and show error if OTP is wrong
                         enteredPin.setLength(0);
-                        updatePinDots();
+                        updatePinDigits();
                         Toast.makeText(this, "Invalid OTP. Please try again.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void updatePinDots() {
-        setDotState(dot1, enteredPin.length() >= 1);
-        setDotState(dot2, enteredPin.length() >= 2);
-        setDotState(dot3, enteredPin.length() >= 3);
-        setDotState(dot4, enteredPin.length() >= 4);
-        setDotState(dot5, enteredPin.length() >= 5);
-        setDotState(dot6, enteredPin.length() >= 6);
-    }
+    private void updatePinDigits() {
+        TextView[] boxes = {dot1, dot2, dot3, dot4, dot5, dot6};
+        int len = enteredPin.length();
 
-    private void setDotState(View dot, boolean filled) {
-        if (dot == null) return;
-        dot.setBackgroundResource(filled ? R.drawable.bg_pin_dot_filled : R.drawable.bg_pin_dot_empty);
+        for (int i = 0; i < boxes.length; i++) {
+            if (boxes[i] == null) continue;
+            if (i < len) {
+                // Show the entered digit with filled background
+                boxes[i].setText(String.valueOf(enteredPin.charAt(i)));
+                boxes[i].setBackgroundResource(R.drawable.bg_pin_dot_filled);
+//                boxes[i].setTextColor(android.graphics.Color.WHITE);
+                boxes[i].setTextColor(android.graphics.Color.parseColor("#184C3A"));
+            } else {
+                // Show empty box
+                boxes[i].setText("");
+                boxes[i].setBackgroundResource(R.drawable.bg_pin_dot_empty);
+                boxes[i].setTextColor(android.graphics.Color.TRANSPARENT);
+            }
+        }
     }
 }
