@@ -161,6 +161,7 @@ public class HisaabFragment extends Fragment {
                                     .setNegativeButton("Cancel", (d, w) -> d.dismiss())
                                     .setPositiveButton("Logout", (d, w) -> {
                                         FirebaseAuth.getInstance().signOut();
+                                        MyApplication.username = "";
                                         Intent i = new Intent(requireActivity(), SignupActivity.class);
                                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(i);
@@ -174,6 +175,13 @@ public class HisaabFragment extends Fragment {
     }
 
     private void loadUsername() {
+        // 1. Check local cache first for instant loading
+        if (MyApplication.username != null && !MyApplication.username.isEmpty()) {
+            tvUsername.setText(MyApplication.username);
+            return;
+        }
+
+        // 2. Fallback to Firebase if cache is empty
         FirebaseUser user = auth.getCurrentUser();
         if (user == null) {
             tvUsername.setText("Guest");
@@ -184,15 +192,19 @@ public class HisaabFragment extends Fragment {
                 .document(user.getUid())
                 .get()
                 .addOnSuccessListener(doc -> {
-                    String username = "";
                     if (doc.exists() && doc.getString("username") != null) {
-                        username = doc.getString("username").trim();
+                        String fetchedName = doc.getString("username").trim();
+                        if (!fetchedName.isEmpty()) {
+                            // 3. Save to cache for all other fragments
+                            MyApplication.username = fetchedName;
+                            tvUsername.setText(fetchedName);
+                        } else {
+                            tvUsername.setText("User");
+                        }
                     }
-                    tvUsername.setText(username.isEmpty() ? "User" : username);
                 })
                 .addOnFailureListener(e -> tvUsername.setText("User"));
     }
-
     private void updateChipUI() {
         int selBg = R.drawable.bg_nav_selected;
         int unselBg = R.drawable.bg_rounded_very_light_green;

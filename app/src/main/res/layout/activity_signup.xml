@@ -19,29 +19,33 @@
         android:paddingBottom="26dp">
 
         <!-- Logo -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
         <ImageView
             android:id="@+id/imgShield"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="180dp"
+            android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_shield"
+            android:src="@drawable/img_app_logo"
+
             android:contentDescription="@string/app_name"
             app:tint="#D8F3DC" />
 
-        <TextView
-            android:id="@+id/tvAppName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="14dp"
-            android:text="SmartKarobar"
-            android:textColor="#D8F3DC"
-            android:textSize="46sp"
-            android:textStyle="bold" />
+<!--        <TextView-->
+<!--            android:id="@+id/tvAppName"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:layout_marginTop="14dp"-->
+<!--            android:text="SmartKarobar"-->
+<!--            android:textColor="#D8F3DC"-->
+<!--            android:textSize="46sp"-->
+<!--            android:textStyle="bold" />-->
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="86dp" />
+            android:layout_height="50dp" />
 
         <!-- Heading -->
         <TextView

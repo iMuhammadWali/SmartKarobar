@@ -271,7 +271,7 @@
                             android:id="@+id/tvReceivable"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="UDHAAR"
+                            android:text="RECEIVABLE"
                             android:textColor="#2F3740"
                             android:textSize="10sp"
                             android:textStyle="bold" />

@@ -40,10 +40,11 @@
             android:textStyle="bold"
             android:lineSpacingExtra="2dp" />
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_shield" />
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:src="@drawable/img_app_logo"
+            app:tint="@color/white" />
     </LinearLayout>
 
 <!--    Body -->
@@ -133,19 +134,6 @@
                     android:layout_marginTop="8dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingTop="4dp"
-                        android:paddingBottom="4dp"
-                        android:text="+25%"
-                        android:textSize="11sp"
-                        android:textStyle="bold"
-                        android:textColor="#2D6A4F"
-                        android:background="@drawable/bg_green_badge" />
 
                     <TextView
                         android:layout_width="wrap_content"

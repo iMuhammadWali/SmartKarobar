@@ -61,6 +61,7 @@ public class DashboardFragment extends Fragment {
                                     .setNegativeButton("Cancel", (d, w) -> d.dismiss())
                                     .setPositiveButton("Logout", (d, w) -> {
                                         FirebaseAuth.getInstance().signOut();
+                                        MyApplication.username = "";
                                         Intent i = new Intent(requireActivity(), SignupActivity.class);
                                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(i);
@@ -102,6 +103,13 @@ public class DashboardFragment extends Fragment {
     }
 
     private void loadUsername() {
+        // 1. Check local cache first for speed
+        if (MyApplication.username != null && !MyApplication.username.isEmpty()) {
+            tvUsername.setText(MyApplication.username);
+            return; // Stop here, no need to call Firestore
+        }
+
+        // 2. If local is empty, fetch from Firestore
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             tvUsername.setText("Guest");
@@ -114,20 +122,20 @@ public class DashboardFragment extends Fragment {
                 .document(uid)
                 .get()
                 .addOnSuccessListener(doc -> {
-                    String username = "";
                     if (doc.exists() && doc.getString("username") != null) {
-                        username = doc.getString("username").trim();
-                    }
+                        String fetchedName = doc.getString("username").trim();
 
-                    if (username.isEmpty()) {
-                        tvUsername.setText("User");
-                    } else {
-                        tvUsername.setText(username);
+                        if (!fetchedName.isEmpty()) {
+                            // 3. Save to local cache for next time
+                            MyApplication.username = fetchedName;
+                            tvUsername.setText(fetchedName);
+                        } else {
+                            tvUsername.setText("User");
+                        }
                     }
                 })
                 .addOnFailureListener(e -> tvUsername.setText("User"));
     }
-
     private void loadThisMonthDashboard() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
